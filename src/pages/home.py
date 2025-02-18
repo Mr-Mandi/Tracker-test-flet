@@ -9,10 +9,16 @@ def initial_view(page: ft.Page):
     actually_word = 'x'
 
     def get_random_text(e):
-        nonlocal actually_word  # Important!
+        nonlocal actually_word
         options = get_random_text_options()
         random_text.value = options
-        actually_word = options  # Now modifies the outer actually_word
+        actually_word = options
+        page.update()
+
+    def textbox_changed(e):
+        nonlocal actually_word
+        random_text.value = e.control.value
+        actually_word = random_text.value
         page.update()
 
     def navigate_to_timer(e):
@@ -30,9 +36,11 @@ def initial_view(page: ft.Page):
     random_text = ft.Text(
         value="",
         size=16,
-        color=ft.colors.BLUE,
+        color=ft.Colors.BLACK,
         text_align=ft.TextAlign.CENTER,
     )
+
+    tb1 = ft.TextField(label="texto", width=300, on_change=textbox_changed,)
 
     random_button = ft.ElevatedButton(
         text="Random Select",
@@ -44,14 +52,15 @@ def initial_view(page: ft.Page):
         text="Start",
         on_click=navigate_to_timer,
         width=300,
-        color=ft.colors.WHITE,
-        bgcolor=ft.colors.BLUE,
+        color=ft.Colors.WHITE,
+        bgcolor=ft.Colors.BLUE,
     )
 
     container = ft.Container(
         content=ft.Column(
             controls=[
                 image,
+                tb1,
                 random_button,
                 random_text,
                 start_button,
@@ -61,7 +70,7 @@ def initial_view(page: ft.Page):
         ),
         padding=40,
         border_radius=10,
-        bgcolor=ft.colors.WHITE,
+        bgcolor=ft.Colors.WHITE,
     )
 
     page.add(container)

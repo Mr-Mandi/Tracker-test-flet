@@ -11,9 +11,9 @@ def timer_view(page: ft.Page, function, word):
         function(page)
 
     back_button = ft.IconButton(
-        icon=ft.icons.ARROW_BACK,
+        icon=ft.Icons.KEYBOARD_BACKSPACE_OUTLINED,
         on_click=go_back_to_initial_view,
-        icon_color=ft.colors.BLUE,
+        icon_color=ft.Colors.BLUE,
     )
 
     image = ft.Image(
@@ -27,7 +27,7 @@ def timer_view(page: ft.Page, function, word):
     title_page = ft.Text(
         word,
         size=40,
-        color=ft.colors.BLACK,
+        color=ft.Colors.BLACK,
         weight=ft.FontWeight.BOLD,
         text_align=ft.TextAlign.CENTER,
     )
@@ -35,12 +35,18 @@ def timer_view(page: ft.Page, function, word):
     time_text = ft.Text(
         "00:00:00",
         size=40,
-        color=ft.colors.BLACK,
+        color=ft.Colors.BLACK,
         weight=ft.FontWeight.BOLD,
         text_align=ft.TextAlign.CENTER,
     )
 
     def initial_timer():
+        if chronometer.paused_time is True:
+            chronometer.set_pause()
+
+        if chronometer.paused_time is False and chronometer.seconds > 0:
+            pass
+
         while chronometer.paused_time is False:
             sleep(1)
             chronometer.start(page, time_text)
@@ -67,7 +73,10 @@ def timer_view(page: ft.Page, function, word):
                         ),
                         ft.ElevatedButton(
                             text="Stop",
-                            on_click=lambda e: chronometer.stop(page=page)
+                            on_click=lambda e: chronometer.stop(
+                                page=page,
+                                time_text=time_text
+                            )
                         ),
                     ],
                     alignment=ft.MainAxisAlignment.CENTER,
@@ -79,7 +88,7 @@ def timer_view(page: ft.Page, function, word):
         ),
         padding=40,
         border_radius=10,
-        bgcolor=ft.colors.WHITE,
+        bgcolor=ft.Colors.WHITE,
     )
 
     page.add(container)
